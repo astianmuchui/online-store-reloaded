@@ -1,12 +1,13 @@
 <?php
+  session_start();
   if(isset($_POST['submit'])){
     require './core/core.php';
-    connect($db);
-    $name = mysqli_real_escape_string($db,$_POST['name']);
-    $email = mysqli_real_escape_string($db,$_POST['email']);
-    $phone = mysqli_real_escape_string($db,$_POST['phone']);
-    $message = mysqli_real_escape_string($db,$_POST['message']);
-    makeContact($name,$email,$phone,$message);
+      require './core/db.php';
+      $_SESSION['name'] = mysqli_real_escape_string($db,$_POST['name']);
+      $_SESSION['email'] = mysqli_real_escape_string($db,trim($_POST['email']));
+      $_SESSION['phone'] = mysqli_real_escape_string($db,$_POST['phone']);
+      $_SESSION['message'] = mysqli_real_escape_string($db,$_POST['message']);
+      header("Location: ./core/handler.php?id=1");
   }
 ?>
 <!DOCTYPE html>
@@ -23,14 +24,12 @@
     <title>Pretty Collections | Welcome</title>
 </head>
 <body>
-    
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
               <a class="navbar-brand" href="#"><img src="./assets/img/rszz.png" alt="" height="50" width="120" ></a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-              </button>
-          
+              </button>    
               <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav me-auto">
                   <li class="nav-item">
@@ -51,8 +50,6 @@
               </div>
             </div>
           </nav>
-    
-    
       <main class="main" >
         <div class="intro-text">
             <p>Your home of world class products</p>
@@ -169,19 +166,19 @@
         <div class="form-container">
           <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" name="name" id="floatingInput" placeholder="Someone">
+              <input type="text" class="form-control" name="name" id="floatingInput" placeholder="Someone" required>
               <label for="floatingInput">Your Name</label>
             </div>
             <div class="form-floating mb-3">
-              <input type="email" class="form-control" id="floatingInput" name="email" placeholder="Someone@gmail.com">
+              <input type="email" class="form-control" id="floatingInput" name="email" placeholder="Someone@gmail.com" required>
               <label for="floatingInput">Your Email</label>
             </div>
             <div class="form-floating mb-3">
-              <input type="number" class="form-control" id="floatingInput" placeholder="Phone" name="phone">
+              <input type="number" class="form-control" id="floatingInput" placeholder="Phone" name="phone" required>
               <label for="floatingInput">Your phone (Start with 0)</label>
             </div>
             <div class="form-group">
-              <textarea name="message" id="" cols="30" rows="10" class="form-control" placeholder="Message"></textarea> <br>
+              <textarea name="message" id="" cols="30" rows="10" class="form-control" placeholder="Message" required></textarea> <br>
             </div>
             <div class="form-group">
               <input type="submit" value="Send message" name="submit" class="btn btn-light">
